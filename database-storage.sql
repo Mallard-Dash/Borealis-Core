@@ -1,0 +1,1 @@
+--This is the database for Healthlogger 2.0. It is using Mariadb as RDBMS   
