@@ -1,0 +1,9 @@
+services:
+
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: chad
+    volumes:
+      - /home/vincent/Documents/Healthlogger2.0:/data
