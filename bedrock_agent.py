@@ -7,7 +7,7 @@ import os
 load_dotenv()
 
 def call_agent():
-
+    chat_history = []
 
     # Create a Bedrock Runtime client in the AWS Region of your choice.
     client = boto3.client("bedrock-runtime", region_name="us-east-1")
@@ -16,43 +16,33 @@ def call_agent():
     model_id = "us.anthropic.claude-3-5-haiku-20241022-v1:0"
 
     # Define the prompt for the model. This prompt is just a test to see if it works (it does)
-    prompt = "You are a helpful assistant. Let the user know how to count bits in an ip-address"
+    system_prompt = "You are my assistant with a bad attitude and in a constant bad mood."
+    while True:
+        user_input=input("You:")
+        chat_history.append({"role": "user", "content": [{"type": "text", "text": user_input}]})
+        if user_input.lower() == "exit":
+            break
 
-    # Format the request payload using the model's native structure.
-    native_request = {
-            "anthropic_version": "bedrock-2023-05-31", # Fixat bindestrecken!
-            "max_tokens": 512,
-            "temperature": 0.5,
-            "messages": [
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "text", 
-                            "text": prompt
-                        }
-                    ],
-                }
-            ],
-        }
+        # Format the request payload using the model's native structure.
+        native_request = {
+                "anthropic_version": "bedrock-2023-05-31",
+                "max_tokens": 512,
+                "temperature": 0.5,
+                "system": system_prompt,
+                "messages": chat_history
+            }
 
-    # Convert the native request to JSON.
-    request = json.dumps(native_request)
+        try:
+            response = client.invoke_model(modelId=model_id, body=json.dumps(native_request))
+            model_response = json.loads(response["body"].read())
+            ai_text = model_response["content"][0]["text"]
+            print(f"AI: {ai_text}.")
+            chat_history.append({"role": "assistant", "content": [{"type": "text", "text": ai_text}]})
 
-    try:
-        # Invoke the model with the request.
-        response = client.invoke_model(modelId=model_id, body=request)
+        except (ClientError, Exception) as e:
+            print(f"ERROR: Can't invoke '{model_id}'. Reason: {e}")
+            exit(1)
 
-    except (ClientError, Exception) as e:
-        print(f"ERROR: Can't invoke '{model_id}'. Reason: {e}")
-        exit(1)
 
-    # Decode the response body.
-    model_response = json.loads(response["body"].read())
-
-    # Extract and print the response text.
-    response_text = model_response["content"][0]["text"]
-    print(response_text)
-
-call_agent()
+#call_agent()
 

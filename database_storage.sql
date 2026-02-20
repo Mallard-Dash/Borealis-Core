@@ -4,27 +4,30 @@ CREATE DATABASE IF NOT EXISTS healthlogger;
 USE healthlogger;
 
 CREATE TABLE IF NOT EXISTS users(
-    user_id INT(64) NOT NULL AUTO_INCREMENT,
-    username VARCHAR(255) NOT NULL UNIQUE,
+    user_id INT NOT NULL AUTO_INCREMENT,
+    username VARCHAR(255) UNIQUE NOT NULL,
     PRIMARY KEY(user_id)
 );
 
 CREATE TABLE IF NOT EXISTS daily_data(
-    entryid INT(64) NOT NULL AUTO_INCREMENT,
+    entryid INT NOT NULL AUTO_INCREMENT,
     entry_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    weight FLOAT,
+    username VARCHAR(255) NOT NULL,
+    user_weight FLOAT,
     waist FLOAT,
-    blood_preasure VARCHAR(25),
-    mental_state VARCHAR,
+    blood_pressure VARCHAR(25),
+    mental_state VARCHAR(64),
     stress INT,
-    PRIMARY KEY(entryid) 
+    PRIMARY KEY(entryid),
+    FOREIGN KEY (username) REFERENCES users(username)
 );
 
 CREATE TABLE IF NOT EXISTS diary(
-    user_id INT(64) NOT NULL,
+    user_id INT NOT NULL,
     entry_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    content TEXT NOT NULL
-
+    content TEXT NOT NULL,
+    PRIMARY KEY (user_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 --The following table is like a memory-cache for the ai-agent so it can remember your previous conversations
