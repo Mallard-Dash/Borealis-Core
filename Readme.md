@@ -8,3 +8,5 @@ Mariadb which also gives me an excuse to use Docker also.
 
 20 february 2026: I have sucessfully implemented the ai-LLM from aws, the DB is up and running in a docker-container and most of the functionality in the menus
 is on the way. I have also installed a nice logo that will show at start. 
+
+21 february 2026: I sat for like 2 hours with a annoying problem with the imports file to file. Oh yeah and I also added a user-session with login, user creation and passwords. I will implement a hashing for the passwords also in the future.
