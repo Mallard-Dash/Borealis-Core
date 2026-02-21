@@ -6,6 +6,7 @@ USE healthlogger;
 CREATE TABLE IF NOT EXISTS users(
     user_id INT NOT NULL AUTO_INCREMENT,
     username VARCHAR(255) UNIQUE NOT NULL,
+    passwd VARCHAR(255) NOT NULL,
     PRIMARY KEY(user_id)
 );
 

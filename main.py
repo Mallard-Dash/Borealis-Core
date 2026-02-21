@@ -7,6 +7,7 @@ import sys
 from dotenv import load_dotenv
 import bedrock_agent
 import os
+#import login
 import pyfiglet
 from lolpython import lol_py 
 load_dotenv()
@@ -38,19 +39,14 @@ def stress_query():
     user_name = input("Enter your username: ")
 
 def database_connection():
-    try:
         conn = mariadb.connect(
             user=os.getenv("DB_USER"),
             password=os.getenv("DB_PASSWORD"),
             host="127.0.0.1",
             port=int(os.getenv("DB_PORT")),
             database="healthlogger"
-
         )
-
-    except mariadb.Error as e:
-        print(f"Error connecting to MariaDB Platform: {e}")
-        sys.exit(1)
+        return conn
 
 def enter_values():
     conn = mariadb.connect(
@@ -168,7 +164,7 @@ def main_menu():
         except ValueError:
             print("Only integers are allowed")
 
-print("Connecting to database...")
+'''print("Connecting to database...")
 time.sleep(3)
 print("Connection established!")
 #database_connection()
@@ -179,5 +175,5 @@ T = ("Healthlogger 2.0")
 ASCII_art_1 = pyfiglet.figlet_format(T,font='slant')
 print (lol_py(ASCII_art_1))
 time.sleep(2)
-main_menu()
+main_menu()'''
 
