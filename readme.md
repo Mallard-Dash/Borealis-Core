@@ -1,37 +1,45 @@
-#-----------------------------------------------------------------------------------------------------------#
-#Borealis-Core#
-#-----------------------------------------------------------------------------------------------------------#
+# Borealis-Core
 
-This is an application created firsthand for my own sake because I really like to keep track of important data. And what could be more important than
-your own health? We all love to code and develop projects, but we also need to make our bodies last many many years. That's why I made this application.
-The user can log weight, waist-measure, blood-pressure, stress, and overall mood. The last two values is entered with a number on a scale from 1-10,
-you get the picture.
+Borealis-Core is an application I created for myself because I like keeping track of important data—and what could be more important than your health?
 
-##So where does AI come into the picture?## 
-Any way you want to! In the first version as i'm writing this, the LLM is only a chat in a while-loop that sends/recieves requests from AWS Bedrock. But in future
-versions I would like to give the LLM access to user-data so it can give comments and such on the users health. Or just chat with it like a friend.
+The user can log:
 
-##DISCLAIMER!##
-Firstly, I am no doctor nor do I have medical education, and the same thing goes for the LLM-ai. If you feel ill or that something ain't right,
-then don't hesitate to contact a real medical professional. As I said before, this application is only for my own educational purpose.
+- Weight
+- Waist measurement
+- Blood pressure
+- Stress (1–10)
+- Overall mood (1–10)
 
-##Secondly##
+## Where does AI come into the picture?
 
-The ai-LLM from AWS-bedrock is using keys from my own AWS and I tend to keep it that way. That means the application will surely be broken
-if you try to run it as it is. I will write instructions you can follow if you have your own AWS and want to call on an ai-LLM. If you are skilled
-you could try to rebuild the 'bedrock-agent.py' to suit API-calls from another LLM-provider, just write what you've changed if you want to redistribute. :)
+Anywhere you want it to.
 
-##Where did the idea come from?##
-Because I did a simmilar program like this at the very beginning of my code journey. This program is written with fresh code from scratch, the only thing
-the programs share are the ideas and concepts. 
-This is the git-repo for my old program called: [healthlogger](https://github.com/Mallard-Dash/Healthlogger_git)
+In the first version (as I’m writing this), the LLM is only a chat running in a while-loop that sends/receives requests from AWS Bedrock. In future versions, I’d like to give the LLM access to user data so it can comment on health trends, provide insights, and generally chat like a friend.
 
+## Disclaimer
 
-###Techstack Borealis-Core###
+### Medical disclaimer
 
-Python
-Docker
-Mariadb
-AWS-Bedrock
-SQL 
+I am not a doctor and I have no medical education—and the same goes for the LLM. If you feel ill or something isn’t right, contact a real medical professional.
 
+This application is for my own educational purposes.
+
+### AWS / LLM keys disclaimer
+
+The AWS Bedrock LLM uses keys from my personal AWS account, and I intend to keep it that way. This means the application will likely be broken if you try to run it as-is.
+
+I will write instructions you can follow if you have your own AWS account and want to call an LLM. If you are skilled, you could also rebuild `bedrock-agent.py` to use API calls from another LLM provider—just document what you changed if you redistribute.
+
+## Where did the idea come from?
+
+I built a similar program at the very beginning of my coding journey. This program is written fresh from scratch; the only thing they share are the ideas and concepts.
+
+Old program repo: [healthlogger](https://github.com/Mallard-Dash/Healthlogger_git)
+
+## Tech stack
+
+- Python
+- Docker
+- MariaDB
+- AWS Bedrock
+- SQL
