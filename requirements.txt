@@ -4,3 +4,4 @@ colorama
 pyfiglet
 lolpython
 python-dotenv
+pwinput
