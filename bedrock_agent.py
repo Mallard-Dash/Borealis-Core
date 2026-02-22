@@ -4,6 +4,8 @@ import json
 from botocore.exceptions import ClientError
 from dotenv import load_dotenv
 import os
+from colorama import Fore, Style, init
+init(autoreset=True)
 load_dotenv()
 
 def call_agent():
@@ -36,13 +38,13 @@ def call_agent():
             response = client.invoke_model(modelId=model_id, body=json.dumps(native_request))
             model_response = json.loads(response["body"].read())
             ai_text = model_response["content"][0]["text"]
-            print(f"AI: {ai_text}.")
+            print(Fore.CYAN + f"AI: {ai_text}.")
             chat_history.append({"role": "assistant", "content": [{"type": "text", "text": ai_text}]})
 
         except (ClientError, Exception) as e:
             print(f"ERROR: Can't invoke '{model_id}'. Reason: {e}")
             exit(1)
 
-
-#call_agent()
+#This is here for testing and not in use right now
+#call_agent() 
 

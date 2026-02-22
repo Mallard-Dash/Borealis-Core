@@ -24,11 +24,12 @@ CREATE TABLE IF NOT EXISTS daily_data(
 );
 
 CREATE TABLE IF NOT EXISTS diary(
+    entry_id INT NOT NULL AUTO_INCREMENT,
     user_id INT NOT NULL,
     entry_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     content TEXT NOT NULL,
-    PRIMARY KEY (user_id),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    PRIMARY KEY (entry_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 --The following table is like a memory-cache for the ai-agent so it can remember your previous conversations

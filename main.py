@@ -1,4 +1,4 @@
-#Healthlogger 2.0
+#Borealis-Core
 
 import time
 from colorama import init, Style,Fore
@@ -9,10 +9,12 @@ import bedrock_agent
 import os
 import login
 import pyfiglet
+import diary
 from lolpython import lol_py 
 load_dotenv()
 init(autoreset=True)
 
+#The following 5 functions are currently not in use
 def weight_query():
     database_connection()
     cur=conn.cursor
@@ -76,29 +78,6 @@ def enter_values(conn):
 def show_values():
     pass
 
-def sub_menu_diary(user_session):
-    while True:
-        try:
-            print(f"***Diary menu***\n",
-                "1. Show available diaries\n",
-                "2. Write a new entry\n",
-                "3. Print an entry\n",
-                "4. Go back\n")
-            diary_menu_choice=int(input("Please make a choice: "))
-            if diary_menu_choice == 1:
-                pass
-            elif diary_menu_choice == 2:
-                pass
-            elif diary_menu_choice == 3:
-                pass
-            elif diary_menu_choice == 4:
-                print("Going back...")
-                time.sleep(1)
-                break
-            else:
-                print(Fore.RED + "Wrong input, please try again.")
-        except ValueError:
-            print(Fore.RED + "Only integers are allowed, try again.")
 
 def graph_menu():
     while True:
@@ -130,14 +109,16 @@ def graph_menu():
         except ValueError:
             print(Fore.RED + "Only integers are allowed.")
 
-def main_menu(user_session):
+            
+
+def main_menu(session, conn):
         print("Connecting to database...")
-        time.sleep(3)
+        time.sleep(1.5)
         print(Fore.GREEN + "Connection established!")
         print("Waking up the ai-agent...")
-        time.sleep(2)
+        time.sleep(1)
         print(Fore.GREEN + "Ai-agent up and running!")
-        T = ("Healthlogger 2.0")
+        T = ("Borealis-Core")
         ASCII_art_1 = pyfiglet.figlet_format(T,font='slant')
         print (lol_py(ASCII_art_1))
         while True:
@@ -147,12 +128,12 @@ def main_menu(user_session):
                     "2. Access diary\n",
                     "3. Look at your data\n",
                     "4. AI-chat\n",
-                    "5. Exit\n")
+                    "5. Log out\n")
                 menu_choice=int(input("Welcome to Healthlogger version 2.0! Please make a menu choice: "))
                 if menu_choice == 1:
                     enter_values(database_connection())
                 elif menu_choice == 2:
-                    sub_menu_diary()
+                    diary.sub_menu_diary(session, conn)
                 elif menu_choice == 3:
                     #graph_menu()
                     print("This feature is not ready yet!")
@@ -166,11 +147,12 @@ def main_menu(user_session):
                     print(Fore.RED + "Wrong input, try again.")
             except ValueError:
                 print(Fore.RED + "Only integers are allowed")
-
+conn=database_connection()
 while True:
     session = login.login_menu()
     if session is None:
+        conn.close()
         break
-    main_menu(session)
+    main_menu(session, conn)
         
 
