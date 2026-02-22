@@ -2,23 +2,19 @@
 import mariadb
 import os
 from colorama import init, Fore, Style
+from dotenv import load_dotenv
+import pwinput
+load_dotenv()
 init(autoreset=True)
 
-conn = mariadb.connect(
-    user=os.getenv("DB_USER"),
-    password=os.getenv("DB_PASSWORD"),
-    host="127.0.0.1",
-    port=int(os.getenv("DB_PORT")),
-    database="healthlogger"
-)
 
-def new_user():
+def new_user(conn):
     cur=conn.cursor()
     while True:
         try:
             username=input("Please enter username: ")
-            password=input("Now choose a good password with at least 4 characters: ")
-            password2=input("Enter the same password again: ")
+            password=pwinput.pwinput("Now choose a good password with at least 4 characters: ")
+            password2=pwinput.pwinput("Enter the same password again: ")
 
             if password != password2:
                 print(Fore.RED + "Passwords do not match, please try again!")
@@ -36,12 +32,12 @@ def new_user():
             print("\nReturning...")
             return
 
-def authenticate():
+def authenticate(conn):
     cur=conn.cursor()
     while True:
         try:
             username=input("Enter your username: ")
-            password=input("Enter your password: ")
+            password=pwinput.pwinput("Enter your password: ")
             cur.execute("SELECT user_id FROM users WHERE username = (?) AND passwd =(?)", [username, password])
             user_id= cur.fetchone()
             if user_id:
@@ -60,7 +56,7 @@ def authenticate():
 
 
 
-def login_menu():
+def login_menu(conn):
     while True:
         try:
             print("***Login-menu***\n",
@@ -69,11 +65,11 @@ def login_menu():
                 "3. Exit\n")
             first_choice=int(input("Welcome! Please pick a choice from 1-3: "))
             if first_choice == 1:
-                session = authenticate()
+                session = authenticate(conn)
                 if session:
                     return session
             elif first_choice == 2:
-                new_user()
+                new_user(conn)
             elif first_choice == 3:
                 print("Good bye! :)")
                 time.sleep(1)

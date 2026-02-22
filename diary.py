@@ -31,6 +31,7 @@ def new_entry(conn, user_id):
     cur=conn.cursor()
     entry_text = input("Enter your input-entry: ")
     cur.execute("INSERT INTO diary(content, user_id)VALUES(?, ?)", ([entry_text, user_id]))
+    print(Fore.GREEN + "New entry added!")
     conn.commit()
 
 

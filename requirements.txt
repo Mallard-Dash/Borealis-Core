@@ -1,0 +1,6 @@
+mariadb
+boto3
+colorama
+pyfiglet
+lolpython
+python-dotenv

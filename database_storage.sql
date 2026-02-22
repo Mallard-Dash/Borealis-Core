@@ -13,14 +13,14 @@ CREATE TABLE IF NOT EXISTS users(
 CREATE TABLE IF NOT EXISTS daily_data(
     entryid INT NOT NULL AUTO_INCREMENT,
     entry_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    username VARCHAR(255) NOT NULL,
+    user_id INT NOT NULL,
     user_weight FLOAT,
     waist FLOAT,
     blood_pressure VARCHAR(25),
     mental_state VARCHAR(64),
     stress INT,
     PRIMARY KEY(entryid),
-    FOREIGN KEY (username) REFERENCES users(username)
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS diary(

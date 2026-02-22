@@ -45,28 +45,34 @@ def database_connection():
         conn = mariadb.connect(
             user=os.getenv("DB_USER"),
             password=os.getenv("DB_PASSWORD"),
-            host="127.0.0.1",
-            port=int(os.getenv("DB_PORT")),
+            host=os.getenv("DB_HOST"),
+            port=int(os.getenv("DB_PORT", "3306")),
             database="healthlogger"
         )
         return conn
 
-def enter_values(conn):
+def enter_values(conn, user_id):
     cur=conn.cursor()
     try:
-        username = input("What is your name? ")
         user_weight=float(input("Please enter todays weight in kgs: "))
         waist=float(input("Please enter the waist in cm: "))
         blood_pressure=input("Please enter your bloodpressure and pulse (OVP/UP-PP): ")
         mental_state=int(input("Enter a number from 1-10 that best describes todays mood (1=shit, 10=hit): "))
         stress=int(input("Please enter a number from 1-10 how stressed you feel today (1=calm, 10=burnout): "))
+        if mental_state > 10 or mental_state < 0:
+            print("You can only enter values between 1-10")
+            return
+        if stress > 10 or stress < 0:
+            print("You can only enter values between 1-10")
+            return
         
         summary=(f"Your summary is: {user_weight} kg\n {waist} cm\n {blood_pressure} \n 0--{mental_state}--10 \n 1--{stress}--10")
         #print(summary)
-        save_values=input(f"{summary} \n| Save values (y/n) {username}?")
+        save_values=input(f"{summary} \n| Save values (y/n)?")
         if save_values.lower() == "y":
-            cur.execute("INSERT INTO daily_data (username, user_weight, waist, blood_pressure, mental_state, stress)VALUES(?, ?, ?, ?, ?, ?)", (username, user_weight, waist, blood_pressure, mental_state, stress))
+            cur.execute("INSERT INTO daily_data(user_id, user_weight, waist, blood_pressure, mental_state, stress)VALUES(?, ?, ?, ?, ?, ?)", (user_id, user_weight, waist, blood_pressure, mental_state, stress))
             conn.commit() 
+            print(Fore.GREEN + "Values saved!")
         elif save_values.lower() == "n":
             print(Fore.YELLOW + "Discarding values...")
             return
@@ -131,13 +137,15 @@ def main_menu(session, conn):
                     "5. Log out\n")
                 menu_choice=int(input("Welcome to Healthlogger version 2.0! Please make a menu choice: "))
                 if menu_choice == 1:
-                    enter_values(database_connection())
+                    enter_values(conn, user_id=session)
                 elif menu_choice == 2:
                     diary.sub_menu_diary(session, conn)
                 elif menu_choice == 3:
                     #graph_menu()
                     print("This feature is not ready yet!")
                 elif menu_choice == 4:
+                    print("Redirecting to ai... Exit the ai-chat simply by tyoing 'exit'")
+                    time.sleep(2)
                     bedrock_agent.call_agent()
                 elif menu_choice == 5:
                     print("Exiting...")
@@ -149,7 +157,7 @@ def main_menu(session, conn):
                 print(Fore.RED + "Only integers are allowed")
 conn=database_connection()
 while True:
-    session = login.login_menu()
+    session = login.login_menu(conn)
     if session is None:
         conn.close()
         break
