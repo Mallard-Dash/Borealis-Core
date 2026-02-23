@@ -13,3 +13,7 @@ is on the way. I have also installed a nice logo that will show at start.
 
 22 february 2026: The application is mostly functional now :) I had som real struggle with the SQL-syntax to get Python and Mariadb to talk to each other. The ai-function is only an ai-chat now, but in the next version I will have fixed this so that the LLM can have access to the users health-data in the db. Also
 I added a hash-function for the password-handling.
+
+23 februari 2026: I fixed a minor miss in the main.py where the user is presented with values that makes no sense. I also created a frontend folder in which I have started an npm-build with ReactJS. I know zero about that kind of frontend so this will be interesting for me, but the thought is to make a nice frontend and make the application show there through docker.
+
+23 february 2026: I implemented aws-secrets manager and replaced this with the .env-file for the aws-bedrock credentials.

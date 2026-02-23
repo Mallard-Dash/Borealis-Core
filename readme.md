@@ -43,3 +43,4 @@ Old program repo: [healthlogger](https://github.com/Mallard-Dash/Healthlogger_gi
 - MariaDB
 - AWS Bedrock
 - SQL
+- AWS Secrets manager

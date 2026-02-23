@@ -33,6 +33,8 @@ services:
       DB_NAME: healthlogger
     stdin_open: true
     tty: true
+    volumes:
+      - /home/vincent/.aws:/root/.aws
 
 volumes:
   db_data:

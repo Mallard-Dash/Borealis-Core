@@ -66,7 +66,7 @@ def enter_values(conn, user_id):
             print("You can only enter values between 1-10")
             return
         
-        summary=(f"Your summary is: {user_weight} kg\n {waist} cm\n {blood_pressure} \n 0--{mental_state}--10 \n 1--{stress}--10")
+        summary=(f"Your summary is: Weight{user_weight}kg\n Waist:{waist}cm\n Blood_pressure:{blood_pressure}| \n Mental_state:{mental_state}/10 \n Stress:{stress}/10")
         #print(summary)
         save_values=input(f"{summary} \n| Save values (y/n)?")
         if save_values.lower() == "y":

@@ -1,6 +1,7 @@
 #login.py
 import mariadb
 import os
+import time
 from colorama import init, Fore, Style
 from dotenv import load_dotenv
 import pwinput
