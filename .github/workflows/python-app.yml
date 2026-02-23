@@ -18,6 +18,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Install MariaDB Connector/C (for mariadb)
+      run: sudo apt-get update && sudo apt-get install -y libmariadb-dev
+    - name: Install dependencies
+      run: pip install -r requirements.txt
     - uses: actions/checkout@v4
     - name: Set up Python 3.10
       uses: actions/setup-python@v3
