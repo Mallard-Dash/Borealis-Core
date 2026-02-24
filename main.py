@@ -11,8 +11,10 @@ import login
 import pyfiglet
 import diary
 from lolpython import lol_py 
+import aws_secretsmanager
 load_dotenv()
 init(autoreset=True)
+secret=aws_secretsmanager.get_secret()
 
 #The following 5 functions are currently not in use
 def weight_query():
@@ -117,7 +119,7 @@ def graph_menu():
 
             
 
-def main_menu(session, conn):
+def main_menu(session, conn, secret):
         print("Connecting to database...")
         time.sleep(1.5)
         print(Fore.GREEN + "Connection established!")
@@ -144,9 +146,9 @@ def main_menu(session, conn):
                     #graph_menu()
                     print("This feature is not ready yet!")
                 elif menu_choice == 4:
-                    print("Redirecting to ai... Exit the ai-chat simply by tyoing 'exit'")
+                    print("Redirecting to ai... Exit the ai-chat simply by typing 'exit'")
                     time.sleep(2)
-                    bedrock_agent.call_agent()
+                    bedrock_agent.call_agent(secret)
                 elif menu_choice == 5:
                     print("Exiting...")
                     time.sleep(2)
@@ -161,6 +163,6 @@ while True:
     if session is None:
         conn.close()
         break
-    main_menu(session, conn)
+    main_menu(session, conn, secret)
         
 

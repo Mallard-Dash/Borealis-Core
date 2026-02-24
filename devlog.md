@@ -17,3 +17,5 @@ I added a hash-function for the password-handling.
 23 februari 2026: I fixed a minor miss in the main.py where the user is presented with values that makes no sense. I also created a frontend folder in which I have started an npm-build with ReactJS. I know zero about that kind of frontend so this will be interesting for me, but the thought is to make a nice frontend and make the application show there through docker.
 
 23 february 2026: I implemented aws-secrets manager and replaced this with the .env-file for the aws-bedrock credentials.
+
+24 february 2026: Fixed a bug that made main.py crash because I didn't import the new secretsmanager-file into main.
