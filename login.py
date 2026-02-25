@@ -44,7 +44,7 @@ def authenticate(conn):
             if user_id:
                 print(Fore.GREEN + f"Logged in! Welcome back {username}")
                 user_session = (user_id[0])
-                return user_session
+                return user_session, username
             elif user_id == None:
                 print(Fore.RED + "Wrong password/username, try again!")
                 return None

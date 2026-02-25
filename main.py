@@ -121,7 +121,7 @@ def graph_menu():
 
 def main_menu(session, conn, secret):
         print("Connecting to database...")
-        time.sleep(1.5)
+        time.sleep(0.5)
         print(Fore.GREEN + "Connection established!")
         print("Waking up the ai-agent...")
         time.sleep(1)
@@ -146,12 +146,10 @@ def main_menu(session, conn, secret):
                     #graph_menu()
                     print("This feature is not ready yet!")
                 elif menu_choice == 4:
-                    print("Redirecting to ai... Exit the ai-chat simply by typing 'exit'")
-                    time.sleep(2)
-                    bedrock_agent.call_agent(secret)
+                    bedrock_agent.bedrock_main_menu(secret, session, conn)
                 elif menu_choice == 5:
                     print("Exiting...")
-                    time.sleep(2)
+                    time.sleep(1)
                     break
                 else:
                     print(Fore.RED + "Wrong input, try again.")

@@ -19,3 +19,10 @@ I added a hash-function for the password-handling.
 23 february 2026: I implemented aws-secrets manager and replaced this with the .env-file for the aws-bedrock credentials.
 
 24 february 2026: Fixed a bug that made main.py crash because I didn't import the new secretsmanager-file into main.
+
+24 february 2026: Today I made a real breakthrough. It took me 4 hours, but I managed to solve one of the more challenging parts to persist ai-memory in the database per user. 
+
+25 february 2026: i am finished with the persisting of user-data in the LLM-model, and also added a few new features:
+-Choose a prompt from a template,
+-Write your own custom prompt,
+-Choose between 4 different LLM-models.

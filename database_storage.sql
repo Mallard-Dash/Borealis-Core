@@ -35,12 +35,11 @@ CREATE TABLE IF NOT EXISTS diary(
 --The following table is like a memory-cache for the ai-agent so it can remember your previous conversations
 CREATE TABLE IF NOT EXISTS ai_insights (
     insight_id INT NOT NULL AUTO_INCREMENT,
-    user_id INT NOT NULL,
-    query_hash VARCHAR(64),     
+    user_id INT NOT NULL,    
     user_query TEXT NOT NULL,    
     ai_response TEXT NOT NULL,  
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
     PRIMARY KEY (insight_id),
     CONSTRAINT fk_user_insight FOREIGN KEY (user_id) REFERENCES users(user_id)
-) ENGINE=InnoDB;
+);
