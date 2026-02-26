@@ -54,6 +54,7 @@ def database_connection():
         return conn
 
 def enter_values(conn, user_id):
+    user_id=user_id[0]
     cur=conn.cursor()
     try:
         user_weight=float(input("Please enter todays weight in kgs: "))
@@ -144,7 +145,7 @@ def main_menu(session, conn, secret):
                     diary.sub_menu_diary(session, conn)
                 elif menu_choice == 3:
                     #graph_menu()
-                    print("This feature is not ready yet!")
+                    print(Fore.YELLOW + "This feature is not ready yet!")
                 elif menu_choice == 4:
                     bedrock_agent.bedrock_main_menu(secret, session, conn)
                 elif menu_choice == 5:
