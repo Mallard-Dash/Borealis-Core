@@ -58,8 +58,6 @@ python3 main.py
 
 If there is any issues or errors now I would firstly look at the AWS-connection if it is properly set up.
 ------------------------------------------------------------------------------
-Another way of running the application is directly in the terminal, but you still need the mariadb-instance up and running for this to work.
-Make sure the docker compose isn't running and then type: 
 
 ## Tech stack
 

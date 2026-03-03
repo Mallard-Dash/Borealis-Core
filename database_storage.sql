@@ -43,3 +43,18 @@ CREATE TABLE IF NOT EXISTS ai_insights (
     PRIMARY KEY (insight_id),
     CONSTRAINT fk_user_insight FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
+
+CREATE TABLE IF NOT EXISTS knowledge_categories(
+    category_id INT NOT NULL,
+    category_name VARCHAR(255) NOT NULL,
+    PRIMARY KEY(category_id)
+);
+
+CREATE TABLE IF NOT EXISTS knowledge_db(
+    user_id INT NOT NULL, 
+    category_id INT NOT NULL.
+    knowledge_content TEXT NOT NULL,
+    entry_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES knowledge_categories(category_id)
+);
