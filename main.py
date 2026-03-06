@@ -12,6 +12,7 @@ import pyfiglet
 import diary
 from lolpython import lol_py 
 import aws_secretsmanager
+import knowledge
 load_dotenv()
 init(autoreset=True)
 secret=aws_secretsmanager.get_secret()
@@ -135,20 +136,22 @@ def main_menu(session, conn, secret):
                 print(f"***Main Menu***\n",
                     "1. Enter todays values\n",
                     "2. Access diary\n",
-                    "3. Look at your data\n",
-                    "4. AI-chat\n",
-                    "5. Log out\n")
+                    "3. Personal-wiki\n",
+                    "4. Look at your data\n",
+                    "5. AI-chat\n",
+                    "6. Log out\n")
                 menu_choice=int(input("Welcome to Healthlogger version 2.0! Please make a menu choice: "))
                 if menu_choice == 1:
                     enter_values(conn, user_id=session)
                 elif menu_choice == 2:
                     diary.sub_menu_diary(session, conn)
                 elif menu_choice == 3:
-                    #graph_menu()
-                    print(Fore.YELLOW + "This feature is not ready yet!")
+                    knowledge.knowledge_menu(session, conn)
                 elif menu_choice == 4:
-                    bedrock_agent.bedrock_main_menu(secret, session, conn)
+                    print("This feature is not ready yet!")
                 elif menu_choice == 5:
+                    bedrock_agent.bedrock_main_menu(secret, session, conn)
+                elif menu_choice == 6:
                     print("Exiting...")
                     time.sleep(1)
                     break

@@ -30,3 +30,9 @@ I added a hash-function for the password-handling.
 6th mars 2026: I am currently working on a new feature called 'knowledge-db', and it will be like a wikipedia for each user. It is simmilar to the diary,
 but here the user can store all the knowledge about everything and fetch it whenever the user want to. I have also finished the health-data connection
 to the LLM-model.
+
+6th mars 2026: The knowledge-section is finished earlier than anticipated. The whole foundation for this application is as good as done,
+give or take a few small tweaks. For the future I plan to:
+- Build a frontend
+- More connections to AWS
+- More implementations to come!

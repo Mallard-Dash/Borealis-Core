@@ -13,7 +13,7 @@ services:
       - db_data:/var/lib/mysql
       - ./database_storage.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - 4457:3306
+      - 4458:3306
     healthcheck:
       test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -uroot -p$${MARIADB_ROOT_PASSWORD} --silent"]
       interval: 2s

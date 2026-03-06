@@ -1,9 +1,10 @@
 #Knowledge database
 import time
-import colorama
+from colorama import Fore, init
 import mariadb
+init(autoreset=True)
 
-def knowledge_menu():
+def knowledge_menu(user_id, conn):
     while True:
         try:
             print("***Knowledge menu***\n",
@@ -12,64 +13,90 @@ def knowledge_menu():
                 "3. Go back\n")
             knowledge_choice = int(input("Pleas enter a choice from 1-3: "))
             if knowledge_choice == 1:
-                pass
+                save_knowledge_entry(user_id, conn)
             elif knowledge_choice == 2:
-                pass
+                show_knowledge(user_id, conn)
             elif knowledge_choice == 3:
-                print(Returning...)
+                print("Returning...")
                 time.sleep(1)
                 return
             else:
                 print("Please enter a value from 1-3: ")
+        except KeyboardInterrupt:
+            print("Keyboard Interruption")
         except ValueError:
-            print("Only integers are allowed!")
+            print(Fore.RED + "Only integers are allowed!")
         
-def categories():
+def categories_menu():
+    print("***Categories***")
+    category_names = [
+        "Identity", "Values", "Goals", "Health", "Mental-Health", "Habits", "Skills",
+        "Career", "Finance", "Technology", "Programming", "Security", "Nature", "Fitness", 
+        "Food & Nutrition", "Philosofy", "Psychology", "Relationships", "Communication", 
+        "Creativity", "Projects", "Ideas", "Observations", "Lessons Learned", "Random Facts"
+    ]
+    
+    for i, name in enumerate(category_names, 1):
+        print(f"{i}. {name}")
+    print("26. EXIT")
+    
     while True:
         try:
-            print("***Categories***\n",
-                "1. Identity\n",
-                "2. Values\n",
-                "3. Goals\n",
-                "4. Health\n",
-                "5. Mental-Health\n",
-                "6. Habits\n",
-                "7. Skills\n",
-                "8. Career\n",
-                "9. Finance\n",
-                "10. Technology\n",
-                "11. Programming\n",
-                "12. Security\n",
-                "13. Nature\n",
-                "14. Fitness\n",
-                "15. Food & Nutrition\n",
-                "16. Philosofy\n",
-                "17. Psychology\n",
-                "18. Relationships\n",
-                "19. Communication\n",
-                "20. Creativity\n",
-                "21. Projects\n",
-                "22. Ideas\n",
-                "23. Observations\n",
-                "24. Lessons Learned\n",
-                "25. Random Facts\n",
-                "26. EXIT\n")
             cat_choice = int(input("Please choose what category to store this knowledge in: "))
-            category_names=["identity", "values", "goals", "health", "mental-health", "habits", "skills",
-                    "career", "finance", "technology", "programming", "security", "nature", "fitness", "food-nutrition",
-                    "philosofy", "psychology", "relationships", "communication", "creativity", "projects",
-                    "ideas", "observations", "lessons-learned", "random-facts", "exit"]
-            elif cat_choice == 26:
-                print("Returning...")
-                time.sleep(1)
-                return
-        
+            if cat_choice == 26:
+                return None
+            if 1 <= cat_choice <= 25:
+                return cat_choice
+            else:
+                print(Fore.YELLOW + "Please choose a number between 1-26.")
+        except KeyboardInterrupt:
+            print("Keyboard Interruption")
         except ValueError:
-            print("Only integers are allowed")
+            print(Fore.RED + "Only integers are allowed")
 
-def save knowledge_entry(cat_choice, conn):
-    knowledge = input("Write your knowledge: ")
-    categories()
-    category = input("What category would you like to put this knowledge in?")
+def save_knowledge_entry(user_id, conn):
     cur = conn.cursor()
-    cur.execute("INSERT INTO knowledge_db (category_id, knowledge_content) WHERE user_id =(?) VALUES(?,?)", (user_id,))
+    # Ensure user_id is an integer (handling tuple if necessary)
+    if isinstance(user_id, tuple):
+        user_id = user_id[0]
+        
+    category_id = categories_menu()
+    if category_id is None:
+        return
+
+    knowledge_content = input("Write your knowledge: ")
+
+    try:
+        cur.execute(
+            "INSERT INTO knowledge_db (user_id, category_id, knowledge_content) VALUES (?, ?, ?)", 
+            (user_id, category_id, knowledge_content)
+        )
+        conn.commit()
+        print(Fore.GREEN + "Knowledge saved to your personal wiki!")
+    except KeyboardInterrupt:
+        print("Keyboard Interruption")
+    except mariadb.Error as e:
+        print(Fore.RED + f"Database error: {e}")
+
+def show_knowledge(user_id, conn):
+    if isinstance(user_id, tuple):
+        user_id = user_id[0]
+        
+    cur = conn.cursor()
+    query = """
+        SELECT c.category_name, k.knowledge_content, k.entry_date 
+        FROM knowledge_db k
+        JOIN knowledge_categories c ON k.category_id = c.category_id
+        WHERE k.user_id = ?
+        ORDER BY k.entry_date DESC
+    """
+    cur.execute(query, (user_id,))
+    rows = cur.fetchall()
+    
+    if rows:
+        print(Fore.CYAN + "\n--- Your Personal Wikipedia ---")
+        for category, content, date in rows:
+            print(f"[{date}] {category.upper()}: {content}")
+        print("-------------------------------\n")
+    else:
+        print(Fore.YELLOW + "No knowledge entries found.")
