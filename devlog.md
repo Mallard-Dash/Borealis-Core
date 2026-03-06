@@ -26,3 +26,7 @@ I added a hash-function for the password-handling.
 -Choose a prompt from a template,
 -Write your own custom prompt,
 -Choose between 4 different LLM-models.
+
+6th mars 2026: I am currently working on a new feature called 'knowledge-db', and it will be like a wikipedia for each user. It is simmilar to the diary,
+but here the user can store all the knowledge about everything and fetch it whenever the user want to. I have also finished the health-data connection
+to the LLM-model.

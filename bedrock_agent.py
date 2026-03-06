@@ -150,18 +150,20 @@ def call_agent(secret, session, conn, model_id, system_prompt):
         session = session[0]
 
     chat_history = []
-
-    # Create a Bedrock Runtime client in the AWS Region of your choice.
     client = boto3.client("bedrock-runtime", region_name="us-east-1")
 
-    
-    rows=load_history(conn, user_id=session)
+    health_rows = load_health_data(conn, user_id=session)
+    health_context = format_health_context(health_rows)
+    full_system_prompt = build_system_prompt(system_prompt, health_context)
+
+    rows = load_history(conn, user_id=session)
     if rows:
         rows = list(reversed(rows))
         for row in rows:
             user_msg, ai_msg = build_message(row)
             chat_history.append(user_msg)
             chat_history.append(ai_msg)
+
     print(Fore.GREEN + "AI chat started. Type 'exit' to leave.")
             
     while True:
@@ -176,7 +178,7 @@ def call_agent(secret, session, conn, model_id, system_prompt):
                     "anthropic_version": "bedrock-2023-05-31",
                     "max_tokens": 512,
                     "temperature": 0.5,
-                    "system": system_prompt,
+                    "system": full_system_prompt,
                     "messages": chat_history
                 }
 
@@ -214,7 +216,31 @@ def load_history(conn, user_id):
     cur.execute("SELECT user_query, ai_response FROM ai_insights WHERE user_id = (?) ORDER BY created_at DESC LIMIT 15", (user_id,))
     return cur.fetchall()
 
+def load_health_data(conn, user_id):
+    cur=conn.cursor()
+    cur.execute("SELECT entry_date, user_weight, waist, blood_pressure, mental_state, stress FROM daily_data WHERE user_id = (?) ORDER BY entry_date DESC LIMIT 10", (user_id,))
+    health_data = cur.fetchall()
+    return health_data
 
+def format_health_context(rows):
+    if not rows:
+        return "No recent health data available."
 
+    lines = []
+    for row in rows:
+        entry_date, user_weight, waist, blood_pressure, mental_state, stress = row
+        lines.append(
+            f"{entry_date} | weight: {user_weight} kg | waist: {waist} cm | "
+            f"blood pressure: {blood_pressure} | mood: {mental_state}/10 | stress: {stress}/10"
+        )
 
+    return "Recent health data:\n" + "\n".join(lines)
 
+def build_system_prompt(base_prompt, health_context):
+    return (
+        f"{base_prompt}\n\n"
+        "The following health data belongs to the current user. "
+        "Use it only when relevant to answer questions, give reflections, "
+        "or identify simple patterns. Do not invent trends that are not supported.\n\n"
+        f"{health_context}"
+    )
