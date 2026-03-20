@@ -8,7 +8,6 @@ services:
       MARIADB_USER: vincent
       MARIADB_PASSWORD: chad
       MARIADB_DATABASE: healthlogger
-
     volumes:
       - db_data:/var/lib/mysql
       - ./database_storage.sql:/docker-entrypoint-initdb.d/init.sql
@@ -20,6 +19,7 @@ services:
       timeout: 2s
       retries: 30
 
+  # Original CLI app — kept intact, no changes
   app:
     build: .
     depends_on:
@@ -35,6 +35,27 @@ services:
     tty: true
     volumes:
       - /home/vincent/.aws:/root/.aws
+
+  # New Flask REST API — serves the web frontend
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: "3306"
+      DB_USER: vincent
+      DB_PASSWORD: chad
+      DB_NAME: healthlogger
+      FLASK_SECRET: "borealis-change-this-secret-in-production"
+    ports:
+      - "5000:5000"
+    volumes:
+      - /home/vincent/.aws:/root/.aws
+    restart: unless-stopped
 
 volumes:
   db_data:

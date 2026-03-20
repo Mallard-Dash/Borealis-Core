@@ -5,3 +5,5 @@ pyfiglet
 lolpython
 python-dotenv
 pwinput
+flask
+flask-cors
